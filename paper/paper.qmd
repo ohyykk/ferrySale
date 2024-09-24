@@ -4,7 +4,7 @@ subtitle: "A Statistical Exploration of Sales Trends"
 author: 
   - Yingke He
 thanks: "Code and data are available at: https://github.com/ohyykk/ferrySale.git"
-date: 09-22-2024
+date: 09-23-2024
 date-format: long
 abstract: "This study examines the ticket redemption and sales counts for the Toronto Island Ferry. We analyze time-based trends, relationships between sales and redemptions, and develop statistical models to predict ferry ticket usage. The results provide insights into usage patterns, highlight operational considerations, and suggest avenues for future research."
 format: pdf
