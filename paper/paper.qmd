@@ -1,0 +1,188 @@
+---
+title: "Analyzing Toronto Island Ferry Ticket Counts"
+subtitle: "A Statistical Exploration of Sales Trends"
+author: 
+  - Yingke He
+thanks: "Code and data are available at: https://github.com/ohyykk/ferrySale.git"
+date: 09-22-2024
+date-format: long
+abstract: "This study examines the ticket redemption and sales counts for the Toronto Island Ferry. We analyze time-based trends, relationships between sales and redemptions, and develop statistical models to predict ferry ticket usage. The results provide insights into usage patterns, highlight operational considerations, and suggest avenues for future research."
+format: pdf
+number-sections: true
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+# install.packages("here")
+
+library(tidyverse)
+library(opendatatoronto)
+library(here)
+
+```
+
+
+# Introduction
+
+The Toronto Island Ferry system has long been an essential transportation link between downtown Toronto and the Toronto Islands, serving both residents and tourists. With roots tracing back to the early days of the city’s development, the ferry system reflects both historical and contemporary mobility patterns in the region. Historical accounts provided by @varga1987toronto highlight the evolution of the Toronto Islands' natural environment and its significance to the area’s biodiversity and recreation. Additionally, the potential role of ferries in urban transit systems, as explored by @kopystynski1979potential, underscores their importance in enhancing urban mobility and connectivity.
+
+This paper aims to analyze the ticket counts for the Toronto Island Ferry, exploring trends in ticket redemption and sales, and drawing connections between historical developments and current usage patterns. By integrating insights from both historical and modern perspectives, including contemporary studies on ferry commuting from @roseman2020precarious, this analysis seeks to provide a comprehensive understanding of the factors influencing ferry usage. The remainder of this paper is structured as follows: Section 2 describes the dataset used for analysis, Section 3 outlines the modeling approach, Section 4 presents the results, and Section 5 discusses the implications of the findings and potential directions for future research. We use @citeR and @rohan, and We use @sec-data to reference the data section.
+
+
+
+# Data {#sec-data}
+
+## Overview {#sec-data-overview}
+
+The dataset used in this analysis is the 2024 installment of “Toronto Island Ferry Ticket Counts” obtained from OpenDataToronto (@varga1987toronto). This dataset contains information about the number of ferry tickets redeemed and sold for the Toronto Island Ferry system, which serves as a critical transportation link between downtown Toronto and the Toronto Islands.
+
+The dataset is updated regularly and includes time-stamped entries for ticket redemptions and sales, allowing for a detailed analysis of ferry usage patterns throughout the year. The data is considered “open data” and can be utilized for various analytical purposes, provided that appropriate attribution is given..
+
+The primary variables included in this analysis are:
+
+Timestamp: The date and time when each ticket count was recorded.
+Redemption.Count: The number of ferry tickets redeemed during the specified time period.
+Sales.Count: The number of ferry tickets sold during the specified time period.
+
+The data was processed and analyzed using the R programming language (@citeR). The tidyverse (@rohan) and opendatatoronto packages were employed to download, clean, and prepare the dataset for analysis. The resulting cleaned dataset was then utilized to generate the visualizations and statistical analyses presented in this paper.
+
+## Results {#sec-data-results}
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| results: "hide"
+
+#### Loading the Cleaned Dataset ####
+marriage_licence_packages <- search_packages("Toronto Island Ferry Ticket Counts")
+marriage_licence_packages
+# Retrieve a list of all resources (datasets) available within the found package
+marriage_licence_resources <- marriage_licence_packages %>%
+  list_package_resources()
+# Display the list of resources available in the "Marriage Licence Statistics" package
+marriage_licence_resources
+marriage_licence_statistics <- marriage_licence_resources[2,] %>%
+  get_resource()
+dir.create(here::here("outputs"), showWarnings = FALSE)
+dir.create(here::here("outputs/data"), showWarnings = FALSE)
+
+# Save the retrieved dataset to a CSV file
+write_csv(marriage_licence_statistics, here::here("outputs/data/a.csv"))
+data=marriage_licence_statistics
+data <- read_csv(here::here("outputs/data/a.csv"))
+
+```
+
+To gain an initial insight into the dataset, we plotted the trends in ticket redemption and sales counts over time. The line plot shown in @fig-linePlot provides a clear visual representation of these trends, serving as a starting point for deeper analysis of ferry usage patterns.
+
+The dataset used in this analysis includes timestamped records of ticket redemptions and sales for the Toronto Island Ferry system, offering a time series perspective on ferry usage. The plot in @fig-linePlot specifically highlights how these counts fluctuate over time, reflecting the ebb and flow of passenger demand.
+
+
+```{r}
+#| label: fig-linePlot
+#| fig-cap: Redemption and Sales Counts Over Time
+#| echo: false
+
+ggplot(data, aes(x = Timestamp)) +
+  geom_line(aes(y = Redemption.Count, color = "Redemption Count")) +
+  geom_line(aes(y = Sales.Count, color = "Sales Count")) +
+  labs(title = "Redemption and Sales Counts Over Time",
+       x = "Time",
+       y = "Count") +
+  scale_color_manual(name = "Legend", values = c("Redemption Count" = "blue", "Sales Count" = "red")) +
+  theme_minimal()
+```
+
+As shown in @fig-linePlot, the x-axis denotes the timestamps of each record, while the y-axis represents the number of tickets processed. The blue line corresponds to the redemption counts, and the red line represents the sales counts.
+
+The plot reveals significant variations in ferry usage over time. We observe several peaks in both redemption and sales counts, likely aligning with periods of high activity, such as weekends, holidays, or the peak tourist season during the summer months. These spikes suggest increased demand during favorable weather or event-driven occasions. Conversely, the noticeable dips in the graph may correspond to regular weekdays or off-season times, indicating lower ferry usage during these periods. This information is valuable for understanding the temporal dynamics of ferry operations and can inform better resource management and scheduling.
+\newpage
+
+The scatter plot in @fig-scatterPlot is designed to explore the relationship between ticket redemption and sales counts for the Toronto Island Ferry system. This visualization allows us to understand whether there is a correlation between the number of tickets sold and the number of tickets redeemed during the same time period.
+```{r}
+#| label: fig-scatterPlot
+#| fig-cap: Scatter Plot of Redemption vs Sales Count
+#| echo: false
+#| warning: false
+#| message: false
+
+ggplot(data, aes(x = Redemption.Count, y = Sales.Count)) +
+  geom_point(color = "purple", size = 3) +
+  labs(title = "Scatter Plot of Redemption vs Sales Count",
+       x = "Redemption Count",
+       y = "Sales Count") +
+  theme_minimal()
+```
+
+@fig-scatterPlot displays each data point as a purple dot, where the x-axis represents the count of tickets redeemed, and the y-axis denotes the count of tickets sold. This plot provides insight into the degree of alignment between ticket sales and actual usage (redemptions).
+
+The scatter plot shows how ticket sales and redemptions relate to each other over time. If most points lie along a diagonal line, it indicates a strong positive correlation between the two variables, suggesting that a high number of tickets sold typically corresponds to a high number of tickets redeemed. This scenario could imply effective ticket utilization, where most purchased tickets are being used for travel.
+
+\newpage
+
+The box plot shown in @fig-boxPlot provides a summary of the distribution of ticket sales and redemption counts for the Toronto Island Ferry system. This visualization helps to identify the spread, central tendency, and any potential outliers in the data for both categories, offering a comparative view of the sales and redemption behaviors.
+```{r}
+#| label: fig-boxPlot
+#| fig-cap: Box Plot of Sales and Redemption Counts
+#| echo: false
+#| warning: false
+#| message: false
+
+ggplot(data, aes(x = "Sales Count", y = Sales.Count, fill = "Sales Count")) +
+  geom_boxplot(alpha = 0.5) +
+  geom_boxplot(aes(x = "Redemption Count", y = Redemption.Count, fill = "Redemption Count"), alpha = 0.5) +
+  scale_fill_manual(values = c("Sales Count" = "lightblue", "Redemption Count" = "lightgreen")) +
+  labs(title = "Box Plot of Sales and Redemption Counts",
+       x = "Category",
+       y = "Count",
+       fill = "Legend") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+@fig-boxPlot illustrates two box plots side by side: one for sales counts (light blue) and the other for redemption counts (light green). Each box plot provides a visual summary of the data distribution, highlighting the median, quartiles, and any outliers for each category.
+
+The box plots reveal key differences and similarities in the distribution of sales and redemption counts. The horizontal line inside each box represents the median count, providing a measure of central tendency. The top and bottom edges of the box denote the interquartile range (IQR), which captures the middle 50% of the data. The "whiskers" extending from the box show the range of values within 1.5 times the IQR from the first and third quartiles, while any points beyond these whiskers are considered outliers.
+
+
+# Discussion {#sec-discussion}
+
+
+## First discussion point {#sec-first-point}
+
+In Section 2.2, the time series analysis of ticket sales and redemptions (Figure @fig-linePlot) revealed clear seasonal patterns, with pronounced peaks during the warmer months. This trend aligns with the historical and cultural significance of the Toronto Islands as a recreational destination, as documented by @varga1987toronto. The increased demand during these periods suggests that the ferry system plays a crucial role in supporting both tourism and local leisure activities. These seasonal fluctuations underscore the need for effective resource management and scheduling to accommodate surges in passenger volume during peak times.
+
+## Second discussion point
+The scatter plot analysis in Section 2.3 (Figure @fig-scatterPlot) demonstrated a generally positive correlation between ticket sales and redemptions, suggesting that most tickets purchased are used. However, discrepancies where sales exceed redemptions could be linked to bulk purchases, advanced ticket sales, or unredeemed tickets due to factors like adverse weather conditions. This observation is consistent with the analysis by @kopystynski1979potential, who highlighted the complexities of integrating ferry systems into urban transit networks. Understanding these discrepancies is critical for improving ticketing policies and service offerings to better match supply with demand.
+
+## Third discussion point
+The box plot analysis in Section 2.4 (Figure @fig-boxPlot) provided a comparative view of the variability in sales and redemption counts. The presence of outliers, particularly during periods of high sales but lower-than-expected redemptions, could indicate anomalies such as large-scale events or disruptions in service. Such variability highlights the need for a more robust system to handle unexpected fluctuations in demand, as well as a deeper understanding of passenger behavior. This finding resonates with the work of @roseman2020precarious, who explored the unpredictable nature of ferry commutes and the challenges faced by passengers in adapting to these changes.
+
+## Weaknesses and next steps
+Despite the insights gained, several limitations in the current analysis should be addressed. First, the dataset does not capture the full spectrum of ticket usage behavior, such as the impact of promotional offers or the use of multi-ride passes, which could lead to an overestimation or underestimation of actual ferry usage. Additionally, the analysis does not incorporate external factors such as weather conditions or special events that significantly influence ferry operations, as noted in prior studies like @mcilwraith1984transportation.
+
+To address these limitations, future research should consider incorporating supplementary data sources, such as weather information, event schedules, and passenger feedback, to provide a more comprehensive view of the factors affecting ferry usage. Furthermore, a comparative study with other modes of transportation in Toronto could provide valuable insights into the role of the ferry system within the broader urban transit network. This would help identify areas for service improvement and inform strategies to enhance passenger experience and operational efficiency.
+
+\newpage
+
+\appendix
+
+# Appendix {#sec-appendix}
+
+## Dataset and Graph Sketches {#sec-appendix-sketches}
+
+Sketches depicting both the desired dataset and the graphs generated in this analysis are available in the GitHub Repository.
+
+## Data Cleaning {#sec-appendix-cleaning}
+
+The data cleaning process involved filtering out some of the columns from the raw dataset and renaming some of the data entries for clarity and simplicity.
+
+
+\newpage
+
+# References {#sec-references}
+
