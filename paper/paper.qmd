@@ -60,21 +60,21 @@ The data was processed and analyzed using the R programming language (@citeR). T
 
 #### Loading the Cleaned Dataset ####
 marriage_licence_packages <- search_packages("Toronto Island Ferry Ticket Counts")
-marriage_licence_packages
-# Retrieve a list of all resources (datasets) available within the found package
 marriage_licence_resources <- marriage_licence_packages %>%
   list_package_resources()
-# Display the list of resources available in the "Marriage Licence Statistics" package
-marriage_licence_resources
+
+# Retrieve the dataset
 marriage_licence_statistics <- marriage_licence_resources[2,] %>%
   get_resource()
-dir.create(here::here("outputs"), showWarnings = FALSE)
-dir.create(here::here("outputs/data"), showWarnings = FALSE)
 
-# Save the retrieved dataset to a CSV file
-write_csv(marriage_licence_statistics, here::here("outputs/data/a.csv"))
-data=marriage_licence_statistics
-data <- read_csv(here::here("outputs/data/a.csv"))
+# Create necessary directories
+dir.create(here::here("STA304/paper1/ferrySale/outputs"), showWarnings = FALSE, recursive = TRUE)
+
+# Save the dataset to a CSV file
+write_csv(marriage_licence_statistics, here::here("STA304/paper1/ferrySale/outputs/a.csv"))
+
+# Read the dataset back
+data <- read_csv(here::here("STA304/paper1/ferrySale/outputs/a.csv"))
 
 ```
 
@@ -88,9 +88,10 @@ The dataset used in this analysis includes timestamped records of ticket redempt
 #| fig-cap: Redemption and Sales Counts Over Time
 #| echo: false
 
-ggplot(data, aes(x = Timestamp)) +
-  geom_line(aes(y = Redemption.Count, color = "Redemption Count")) +
-  geom_line(aes(y = Sales.Count, color = "Sales Count")) +
+# Plot Redemption and Sales Counts Over Time
+ggplot(data, aes(x = `Timestamp`)) +
+  geom_line(aes(y = `Redemption.Count`, color = "Redemption Count")) +
+  geom_line(aes(y = `Sales.Count`, color = "Sales Count")) +
   labs(title = "Redemption and Sales Counts Over Time",
        x = "Time",
        y = "Count") +
@@ -101,7 +102,6 @@ ggplot(data, aes(x = Timestamp)) +
 As shown in @fig-linePlot, the x-axis denotes the timestamps of each record, while the y-axis represents the number of tickets processed. The blue line corresponds to the redemption counts, and the red line represents the sales counts.
 
 The plot reveals significant variations in ferry usage over time. We observe several peaks in both redemption and sales counts, likely aligning with periods of high activity, such as weekends, holidays, or the peak tourist season during the summer months. These spikes suggest increased demand during favorable weather or event-driven occasions. Conversely, the noticeable dips in the graph may correspond to regular weekdays or off-season times, indicating lower ferry usage during these periods. This information is valuable for understanding the temporal dynamics of ferry operations and can inform better resource management and scheduling.
-\newpage
 
 The scatter plot in @fig-scatterPlot is designed to explore the relationship between ticket redemption and sales counts for the Toronto Island Ferry system. This visualization allows us to understand whether there is a correlation between the number of tickets sold and the number of tickets redeemed during the same time period.
 ```{r}
@@ -112,11 +112,23 @@ The scatter plot in @fig-scatterPlot is designed to explore the relationship bet
 #| message: false
 
 ggplot(data, aes(x = Redemption.Count, y = Sales.Count)) +
-  geom_point(color = "purple", size = 3) +
-  labs(title = "Scatter Plot of Redemption vs Sales Count",
-       x = "Redemption Count",
-       y = "Sales Count") +
-  theme_minimal()
+  geom_point(color = "purple", size = 3, alpha = 0.7) +  # Add transparency for overlapping points
+  labs(title = "Relationship Between Redemption and Sales Count",
+       subtitle = "Scatter plot with Redemption Count on X-axis and Sales Count on Y-axis",
+       x = "Redemption Count (units)",
+       y = "Sales Count (units)",
+       caption = "Source: Company Sales Data") +  # Add a caption for clarity
+  theme_minimal(base_size = 14) +  # Increase base font size for readability
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),  # Center and bold the title
+    plot.subtitle = element_text(hjust = 0.5),  # Center the subtitle
+    axis.title.x = element_text(face = "italic", margin = margin(t = 10)),  # Italicize X axis label and add margin
+    axis.title.y = element_text(face = "italic", margin = margin(r = 10)),  # Italicize Y axis label and add margin
+    panel.grid.major = element_line(color = "gray80", size = 0.5),  # Make grid lines more subtle
+    panel.grid.minor = element_blank(),  # Remove minor grid lines
+    plot.caption = element_text(hjust = 1, face = "italic", color = "gray40")  # Style caption
+  )
+
 ```
 
 @fig-scatterPlot displays each data point as a purple dot, where the x-axis represents the count of tickets redeemed, and the y-axis denotes the count of tickets sold. This plot provides insight into the degree of alignment between ticket sales and actual usage (redemptions).
