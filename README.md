@@ -8,8 +8,8 @@ By analyzing these patterns, the study offers insights into ferry usage trends a
 This repo is structured as:
 
 -  `data` contains the raw data set obtained from OpenDataToronto.
--  `outputs/data` contains the cleaned data set that constructed for final analysis of this paper.
--  `outputs/paper` contains the files used to generate the final paper, including the PDF form of the paper, the quarto document, and reference bibliography file.
+-  `outputs` contains the cleaned data set that constructed for final analysis of this paper.
+-  `paper` contains the files used to generate the final paper, including the PDF form of the paper, the quarto document, and reference bibliography file.
 -  `script` contains the R scripts used to simulate, download, clean, and test the data.
 -  `other ` contains relevant literature, details about LLM chat interactions, and sketches.
 
