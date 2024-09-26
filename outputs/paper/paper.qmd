@@ -149,7 +149,6 @@ ggplot(data, aes(x = Timestamp)) +
   
   # Add plot labels
   labs(
-    title = "Redemption and Sales Count Over Time",
     y = "Redemption Count",  # Y-axis for Redemption Count
     x = "Timestamp"          # X-axis for Timestamp
   ) +
@@ -162,7 +161,6 @@ ggplot(data, aes(x = Timestamp)) +
     # Color the left-side axis title (Redemption Count) to match the pink line
     axis.title.y.left = element_text(color = "#81B0B2", size = 12),
     # Center the title and increase font size
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold")
   )
 ```
 
@@ -185,7 +183,6 @@ The scatter plot in @fig-scatterPlot is designed to explore the relationship bet
 ggplot(data, aes(x = Sales.Count, y = Redemption.Count)) +
   geom_point(alpha = 0.7, color = "#93445e") +
   labs(
-    title = "Scatterplot: Redemption Count vs Sales Count",
     x = "Sales Count",
     y = "Redemption Count"
   ) +
@@ -217,7 +214,7 @@ ggplot(data, aes(x = "Sales Count", y = Sales.Count, fill = "Sales Count")) +
   geom_boxplot(alpha = 0.5) +
   geom_boxplot(aes(x = "Redemption Count", y = Redemption.Count, fill = "Redemption Count"), alpha = 0.5) +
   scale_fill_manual(values = c("Sales Count" = "lightgreen", "Redemption Count" = "lightblue")) +
-  labs(title = "Box Plot of Sales and Redemption Counts",
+  labs(
        x = "Category",
        y = "Count",
        fill = "Legend") +
