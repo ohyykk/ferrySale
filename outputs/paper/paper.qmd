@@ -71,17 +71,9 @@ marriage_licence_resources <- marriage_licence_packages %>%
 marriage_licence_statistics <- marriage_licence_resources[2,] %>%
   get_resource()
 
-raw_data_path <- "C:/Users/yuqiu/ferrySale/ferrySale-main/inputs/data/raw_data.csv"
-cleaned_data_path <- "C:/Users/yuqiu/ferrySale/ferrySale-main/outputs/data/cleaned_data.csv"
-
-write_csv(marriage_licence_statistics, raw_data_path)
-
-raw_data <- read_csv(raw_data_path, show_col_types = FALSE)
-
-
-cleaned_data <- raw_data
-write_csv(cleaned_data, cleaned_data_path)
-data <- read_csv(cleaned_data_path, show_col_types = FALSE)
+# Read the cleaned data
+data <- read_csv(file = here("outputs/data/cleaned_data.csv"), 
+                 show_col_types = FALSE)
 
 ```
 
@@ -98,7 +90,7 @@ library(knitr)
 library(readr)
 
 # Load the cleaned data from the CSV file (adjust the path as needed)
-data <- read_csv("C:/Users/yuqiu/ferrySale/ferrySale-main/outputs/data/cleaned_data.csv", show_col_types = FALSE)
+data <- read_csv(file = here("outputs/data/cleaned_data.csv"), show_col_types = FALSE)
 
 # Select a segment of the data, e.g., rows 51 to 60 for illustration
 segment_data <- data[51:60, ]
