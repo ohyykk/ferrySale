@@ -15,4 +15,4 @@ This repo is structured as:
 -  `other/llm ` contains details about LLM chat interactions, and sketches.
 
   ## Statement on LLM usage
-  Aspects of the paper are written with the help of ChatGPT and the entire chat history is available in  `[other/llm/usage.txt](https://github.com/ohyykk/ferrySale/blob/main/other/llm/usage.txt)`
+  Aspects of the paper are written with the help of ChatGPT and the entire chat history is available in [`other/llm/usage.txt`](https://github.com/ohyykk/ferrySale/blob/main/other/llm/usage.txt)`
