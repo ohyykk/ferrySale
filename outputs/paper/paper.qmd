@@ -85,7 +85,6 @@ data <- read_csv(file = here("outputs/data/cleaned_data.csv"),
 The table @tbl-cleaned_data provides a detailed snapshot of the Toronto Island Ferry ticket transactions for a specific time period. It includes a unique ID for each transaction, the Time at which each transaction occurred, the number of Tickets Redeemed, the number of Tickets Sold, and the Date of the transaction.
 ```{r}
 #| label: tbl-cleaned_data
-#| fig-cap: Sample Cleaned Data
 #| echo: false
 
 
