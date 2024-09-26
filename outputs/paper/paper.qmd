@@ -54,9 +54,10 @@ The primary variables included in this analysis are:
 **Sales.Count**: The number of ferry tickets sold during the specified time period.  
 
 The data was processed and analyzed using the R programming language (@citeR). The tidyverse (@wickham2019tidyverse) and opendatatoronto packages were employed to download, clean, and prepare the dataset for analysis. The resulting cleaned dataset was then utilized to generate the visualizations and statistical analyses presented in this paper using a collection of libraries which included the following packages:
-- ggplot2(@wickham2016ggplot2)
-- knitr(@xie2023knitr)
-- readr(@wickham2023readr)
+
+- ggplot2 [@wickham2016ggplot2]
+- knitr [@xie2023knitr]
+- readr [@wickham2023readr]
 
 ## Results {#sec-data-resultsk}
 
