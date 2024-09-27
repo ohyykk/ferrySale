@@ -268,8 +268,9 @@ ggplot(peak_day_data, aes(x = Month, y = Total_Sales, group = Year, color = as.f
   )
 
 ```
+ 加一小段描述描述figure1
 
-@fig-linePlot2 below shows the Redemption and Sales Counts in months over years 加一段描述plot2 
+@fig-linePlot2 below shows the Redemption and Sales Counts in months over years， 加一段描述figure2
 
 \newpage
 
