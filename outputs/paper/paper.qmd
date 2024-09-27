@@ -5,7 +5,7 @@ author:
 thanks: "Code and data are available at: https://github.com/ohyykk/ferrySale.git"
 date: 09-23-2024
 date-format: long
-abstract: "This study examines the ticket redemption and sales counts for the Toronto Island Ferry, analyzing time-based trends and the relationships between sales and redemptions. Statistical models are developed to predict ferry ticket usage. The results provide insights into usage patterns, highlight operational considerations, and suggest avenues for future research. The analysis reveals distinct seasonal peaks and troughs in ferry usage, correlating with tourism and weather conditions. Furthermore, the study identifies discrepancies between ticket sales and redemptions, suggesting potential improvements in ticketing strategies and resource allocation."
+abstract: "This study examines the ticket redemption and sales counts for the Toronto Island Ferry, analyzing time-based trends and the relationships between sales and redemptions. Statistical models are developed to predict ferry ticket usage. The results uncover seasonal trends, operational inefficiencies, and discrepancies between ticket sales and redemptions, highlighting the need for improved resource management and service adjustments to better align with fluctuating passenger demand. These findings offer insights into usage patterns, operational considerations, and suggest avenues for future research, particularly in optimizing ticketing strategies and resource allocation."
 format: pdf
 number-sections: true
 # The toc parameter used to create a table of contents was obtained from
@@ -39,7 +39,7 @@ Despite the longstanding role of the Toronto Island Ferry system in connecting d
 
 In addition to the expected peaks during high tourism periods, this study investigates inconsistencies between tickets sold and redeemed, offering insights into potential service inefficiencies. The dual role of the Toronto Island Ferry system in accommodating both daily commuters and a large number of seasonal visitors makes it an important case study in urban transportation planning.
 
-The remainder of this paper is structured as follows: Section 2 introduces the dataset used for the analysis, explaining the key variables and presenting key data analysis. Section 3 discusses the implications of the findings and potential directions for future research. Additional information is presented in the appendix at section A. @citeR and @rohan is utilized for the coding proposes of this paper, and the data section is referenced using @sec-data.
+The remainder of this paper is structured as follows: @sec-data introduces the dataset used for the analysis, explaining the key variables and presenting key data analysis. @sec-discussion discusses the implications of the findings and potential directions for future research. Additional information is presented in the appendix at @sec-appendix. @citeR and @rohan is utilized for the coding proposes of this paper, and the data section is referenced using @sec-data.
 
 
 # Data {#sec-data}
@@ -91,7 +91,7 @@ data <- read_csv(file = here("outputs/data/cleaned_data.csv"),
 
 ```
 
-The table @tbl-cleaned_data provides a detailed snapshot of the Toronto Island Ferry ticket transactions for a specific time period. It includes a unique ID for each transaction, the Time at which each transaction occurred, the number of Tickets Redeemed, the number of Tickets Sold, and the Date of the transaction.
+@tbl-cleaned_data provides a detailed snapshot of the Toronto Island Ferry ticket transactions for a specific time period. It includes a unique ID for each transaction, the Time at which each transaction occurred, the number of Tickets Redeemed, the number of Tickets Sold, and the Date of the transaction.
 ```{r}
 #| label: tbl-cleaned_data
 #| echo: false
@@ -119,12 +119,12 @@ table_data <- segment_data[, c("ID", "Time", "Redemption.Count", "Sales.Count", 
 # Create the table using kable
 kable(table_data, col.names = c('ID', 'Time', 'Tickets Redeemed', 'Tickets Sold', 'Date'), 
       align = "c", 
-      caption = "Table 1: Sample of cleaned Ferry Ticket Counts Data")
+      caption = "Sample of cleaned Ferry Ticket Counts Data")
 
 
 ```
 
-This table shows the typical flucuations in ticket sales and redemptions throughout the day. For example, during late evening hours, we observe varying ticket redemption and sales patterns, which may correspond to changes in passenger demand as the ferry service approaches the end of its operational hours. 
+The above table shows the typical flucuations in ticket sales and redemptions throughout the day. For example, during late evening hours, we observe varying ticket redemption and sales patterns, which may correspond to changes in passenger demand as the ferry service approaches the end of its operational hours. 
 
 
 ```{r}
@@ -144,11 +144,11 @@ summary_stats <- data %>%
 
 # Create the table using kable
 knitr::kable(summary_stats, col.names = c('Avg Redeemed', 'Avg Sold', 'Max Redeemed', 'Max Sold', 'Count'), 
-      align = "c", caption = "Table 2: Summary Statistics of Ticket Counts")
+      align = "c", caption = "Summary Statistics of Ticket Counts")
 
 
 ```
-The summary statistics, shown in Table 2, provide a clear understanding of ferry ticket trends. The high volume of tickets sold and redeemed indicates strong demand for the ferry service, with the close alignment between sales and redemptions suggesting high customer engagement. On average, 46.36 tickets were sold every 15 minutes during working hours, and 48.45 tickets were redeemed, highlighting that most customers have used their tickets. The small gap between sales and redemptions implies a few no-shows or unused tickets. The maximum values of 7,216 for sales and 7,229 for redemptions demonstrate the ferry’s capacity to handle high passenger volumes, typically operating at full capacity on busy days. 
+The summary statistics, shown in @tbl-summary_stats, provide a clear understanding of ferry ticket trends. The high volume of tickets sold and redeemed indicates strong demand for the ferry service, with the close alignment between sales and redemptions suggesting high customer engagement. On average, 46.36 tickets were sold every 15 minutes during working hours, and 48.45 tickets were redeemed, highlighting that most customers have used their tickets. The small gap between sales and redemptions implies a few no-shows or unused tickets. The maximum values of 7,216 for sales and 7,229 for redemptions demonstrate the ferry’s capacity to handle high passenger volumes, typically operating at full capacity on busy days. 
 
 ### Temporal Trends in Redemption and Sales Counts
 
@@ -266,7 +266,7 @@ The box plots reveal key differences and similarities in the distribution of sal
 In Section 2.2, the time series analysis of ticket sales and redemptions (Figure @fig-linePlot) revealed clear seasonal patterns, with pronounced peaks during the warmer months. This trend aligns with the historical and cultural significance of the Toronto Islands as a recreational destination, as documented by @varga1987toronto. The increased demand during these periods suggests that the ferry system plays a crucial role in supporting both tourism and local leisure activities. These seasonal fluctuations underscore the need for effective resource management and scheduling to accommodate surges in passenger volume during peak times.
 
 
-The scatter plot analysis in Section 2.3 (Figure @fig-scatterPlot) demonstrated a generally positive correlation between ticket sales and redemptions, suggesting that most tickets purchased are used. However, discrepancies where sales exceed redemptions could be linked to bulk purchases, advanced ticket sales, or unredeemed tickets due to factors like adverse weather conditions. This observation is consistent with the analysis by @kopystynski1979potential, who highlighted the complexities of integrating ferry systems into urban transit networks. Understanding these discrepancies is critical for improving ticketing policies and service offerings to better match supply with demand.
+The scatter plot analysis in Section 2.3 (@fig-scatterPlot) demonstrated a generally positive correlation between ticket sales and redemptions, suggesting that most tickets purchased are used. However, discrepancies where sales exceed redemptions could be linked to bulk purchases, advanced ticket sales, or unredeemed tickets due to factors like adverse weather conditions. This observation is consistent with the analysis by @kopystynski1979potential, who highlighted the complexities of integrating ferry systems into urban transit networks. Understanding these discrepancies is critical for improving ticketing policies and service offerings to better match supply with demand.
 
 
 The box plot analysis in Section 2.4 (Figure @fig-boxPlot) provided a comparative view of the variability in sales and redemption counts. The presence of outliers, particularly during periods of high sales but lower-than-expected redemptions, could indicate anomalies such as large-scale events or disruptions in service. Such variability highlights the need for a more robust system to handle unexpected fluctuations in demand, as well as a deeper understanding of passenger behavior. This finding resonates with the work of @roseman2020precarious, who explored the unpredictable nature of ferry commutes and the challenges faced by passengers in adapting to these changes.
