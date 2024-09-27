@@ -74,6 +74,8 @@ This process converts individual passenger transactions into structured dataset 
 
 ## Results {#sec-data-resultsk}
 
+The raw data underwent extensive cleaning, including the removal of rows with missing values, conversion of timestamps to a uniform format, and filtering out duplicates and unrealistic values such as negative ticket counts. This process ensured a reliable foundation for subsequent analysis.
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -286,7 +288,7 @@ ggplot(peak_day_data, aes(x = Month, y = Total_Sales, group = Year, color = as.f
 #| message: false
 #| echo: false
 #| fig-width: 8
-#| fig-height: 3.5
+#| fig-height: 3.3
 #| 
 # Load necessary libraries
 library(ggplot2)
@@ -329,11 +331,11 @@ ggplot(monthly_data, aes(x = Month)) +
   # Set symmetrical y-axis limits for both Sales and Redemption
   scale_y_continuous(limits = c(-max_count, max_count),
                      breaks = seq(-max_count, max_count, by = 100000),
-                     sec.axis = sec_axis(~ -., name = "Sales Count (dashed lines)")) +
+                     sec.axis = sec_axis(~ -., name = "Sales Count (straight lines)")) +
   
   # Add plot labels
   labs(
-    y = "Redemption Count (straight lines)",  # Y-axis for Redemption Count (inverted)
+    y = "Redemption Count (dashed lines)",  # Y-axis for Redemption Count (inverted)
     x = "Month",             # X-axis for Month
     color = "Year"
   ) +
@@ -355,7 +357,6 @@ ggplot(monthly_data, aes(x = Month)) +
 
 ```
 
-@fig-linePlot3 below compares the sales count and redemption count in year 2021 and 2023. The two side-by-side plots illustrate distinct usage patterns across these years. 
 
 ```{r}
 #| label: fig-linePlot3
@@ -363,9 +364,8 @@ ggplot(monthly_data, aes(x = Month)) +
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-pos: "H"  # Fix the plot in current place when rendered
 #| fig-width: 8
-#| fig-height: 3
+#| fig-height: 2.8
 
 # Load necessary libraries
 library(ggplot2)
@@ -424,6 +424,7 @@ plot_2021 <- ggplot(data_2021, aes(x = Timestamp)) +
 grid.arrange(plot_2021, plot_2023, ncol = 2)
 
 ```
+@fig-linePlot3 compares the sales count and redemption count in year 2021 and 2023. The two side-by-side plots illustrate distinct usage patterns across these years. 
 
 In 2021, ticket sales and redemptions were more variable, reflecting the gradual recovery from the COVID-19 pandemic as restrictions were lifted and ferry services resumed normal operations. Peaks and troughs are more pronounced, indicating fluctuating demand as public confidence in using public transportation returned. Conversely, the patterns in 2023 exhibit a more consistent trend, with a steadier increase in both ticket sales and redemptions during the summer months, reflecting a return to pre-pandemic demand levels. This comparison highlights the evolving dynamics in ferry usage, influenced by external factors such as public health measures and tourism trends.
 
