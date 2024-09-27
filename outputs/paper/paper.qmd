@@ -47,7 +47,7 @@ The remainder of this paper is structured as follows: @sec-data introduces the d
 
 ## Overview {#sec-data-overview}
 
-The dataset used in this analysis is the 2024 installment of “Toronto Island Ferry Ticket Counts” obtained from OpenDataToronto (@varga1987toronto). This dataset contains information about the number of ferry tickets redeemed and sold for the Toronto Island Ferry system, which serves as a critical transportation link between downtown Toronto and the Toronto Islands.
+The dataset used in this analysis is the 2024 installment of “Toronto Island Ferry Ticket Counts” obtained from OpenDataToronto (@R-opendatatoronto). This dataset contains information about the number of ferry tickets redeemed and sold for the Toronto Island Ferry system, which serves as a critical transportation link between downtown Toronto and the Toronto Islands.
 
 The dataset is updated regularly and includes time-stamped entries for ticket redemptions and sales, allowing for a detailed analysis of ferry usage patterns throughout the year. The data is considered “open data” and can be utilized for various analytical purposes, provided that appropriate attribution is given..
 
@@ -57,11 +57,14 @@ The primary variables included in this analysis are:
 **Redemption.Count**: The number of ferry tickets redeemed during the specified time period.  
 **Sales.Count**: The number of ferry tickets sold during the specified time period.  
 
-The data was processed and analyzed using the R programming language (@citeR). The tidyverse (@tidyverse2019) and opendatatoronto packages were employed to download, clean, and prepare the dataset for analysis. The resulting cleaned dataset was then utilized to generate the visualizations and statistical analyses presented in this paper using a collection of libraries which included the following packages:
+The data was processed and analyzed using the R programming language (@citeR). The tidyverse (@citeTidyverse) and opendatatoronto packages were employed to download, clean, and prepare the dataset for analysis. The resulting cleaned dataset was then utilized to generate the visualizations and statistical analyses presented in this paper using a collection of libraries which included the following packages:
 
-- ggplot2 [@wickham2016ggplot2]
-- knitr [@xie2023knitr]
-- readr [@wickham2023readr]
+- ggplot2 [@citeGgplot2]
+- knitr [@citeKnitr]
+- readr [@citeReadr]
+- gridExtra, solely for the propose of plot arrangements [@R-gridExtra]
+- lubridate [@R-lubridate]
+- here, helps to create relative file paths [@citeHere]
 
 ## Measurements
 
@@ -196,16 +199,17 @@ kable(peak_day_per_year_table, col.names = c("Year", "Peak Day", "Total Sales"),
 
 ```
 
-The dataset used in this analysis provides timestamped records of ticket redemptions and sales for the Toronto Island Ferry system, allowing for a detailed time series analysis of ferry usage patterns. As illustrated in @fig-linePlot1, ferry usage fluctuates significantly throughout the year, with peak activity consistently observed between July and September. This pattern corresponds to the increased passenger demand during the summer holiday season and major events. In 2020, ticket demand saw a sharp decline, likely due to the impact of the COVID-19 pandemic(@urbanyi2020maritime), but it showed signs of gradual recovery starting in 2021 as restrictions eased and tourism began to rebound in Toronto(@travel_gov_2024). By identifying these peak traffic periods in advance, ferry operators can implement targeted operational strategies, such as scheduling additional ferry trips or introducing crowd control measures to minimize the risk of overcrowding or service disruptions. Identifing these high-demand periods can ensure smoother ferry operations and enhance the overall passenger experience.
+The dataset used in this analysis provides timestamped records of ticket redemptions and sales for the Toronto Island Ferry system, allowing for a detailed time series analysis of ferry usage patterns. @fig-linePlot1 illustrates the peak day of ticket sales for each year. Understanding these peak days and their contributing factors can help in forecasting future demand and optimizing resource allocation for similar high-traffic periods.
 
 ```{r}
 #| label: fig-linePlot1
-#| fig-cap: Redemption and Sales Counts Over Time in days
+#| fig-cap: Peak Day for Each Year
 #| echo: false
 #| warning: false
 #| message: false
 #| fig-width: 8
 #| fig-height: 4
+#| fig-pos: "H"  #fix the plot in current place when render
 #| 
 # Load necessary libraries
 library(ggplot2)
@@ -268,11 +272,12 @@ ggplot(peak_day_data, aes(x = Month, y = Total_Sales, group = Year, color = as.f
   )
 
 ```
- 加一小段描述描述figure1
+ 
+ 
+@fig-linePlot1 presents the daily peak ticket sales counts for the Toronto Island Ferry system across various years, offering a clear visualization of seasonal fluctuations in ferry usage. Each line represents the total ticket sales for the busiest day of each month throughout the year, with distinct colors assigned to different years for easy comparison. Notably, the graph highlights consistent peaks in ticket sales during the summer months, especially from June to August, reflecting heightened ferry usage during the tourist season. The sharp decline in sales in 2020, evident in the orange line, corresponds to the COVID-19 pandemic's impact on public transportation and tourism activities (@urbanyi2020maritime). As restrictions eased in 2021, a gradual recovery in ticket sales is observed, depicted by the brown line, indicating a resurgence in ferry demand as tourism began to pick up in Toronto (@travel_gov_2024). This visualization not only showcases the annual variations in peak demand but also underscores the need for adaptive operational strategies to accommodate seasonal surges and unexpected disruptions.
 
-@fig-linePlot2 below shows the Redemption and Sales Counts in months over years， 加一段描述figure2
+@fig-linePlot2 on the following page shows the Redemption and Sales Counts in months over years. The graph uses dashed lines to represent the monthly sales counts and straight lines for the redemption counts. Notably, the inverted redemption counts are plotted for better visualization alongside the sales data. This figure highlights consistent seasonal patterns, with both ticket sales and redemptions peaking during the summer months, from June to August, across most years. The dip observed in 2020 reflects the significant impact of the COVID-19 pandemic on ferry operations, with reduced ferry usage compared to previous years. These trends show the importance of flexible operational planning to accommodate both predictable seasonal demand and unexpected disruptions.
 
-\newpage
 
 ```{r}
 #| label: fig-linePlot2
@@ -280,9 +285,8 @@ ggplot(peak_day_data, aes(x = Month, y = Total_Sales, group = Year, color = as.f
 #| warnings: false
 #| message: false
 #| echo: false
-#| fig-pos: "H"  #fix the plot in current place when render
 #| fig-width: 8
-#| fig-height: 4
+#| fig-height: 3.5
 #| 
 # Load necessary libraries
 library(ggplot2)
@@ -351,16 +355,7 @@ ggplot(monthly_data, aes(x = Month)) +
 
 ```
 
-@fig-linePlot3 on the next page compares the sales count and redemption count in year 2021 and 2023
-
-
-
-
-
-
-   
-
-1 emm这里写一点描述fig3的对比？，render后看页面排版
+@fig-linePlot3 below compares the sales count and redemption count in year 2021 and 2023. The two side-by-side plots illustrate distinct usage patterns across these years. 
 
 ```{r}
 #| label: fig-linePlot3
@@ -368,9 +363,9 @@ ggplot(monthly_data, aes(x = Month)) +
 #| echo: false
 #| warning: false
 #| message: false
-#| fig-pos: "H"  #fix the plot in current place when render
+#| fig-pos: "H"  # Fix the plot in current place when rendered
 #| fig-width: 8
-#| fig-height: 4
+#| fig-height: 3
 
 # Load necessary libraries
 library(ggplot2)
@@ -391,39 +386,58 @@ data_2021 <- data %>%
 y_max <- max(max(data_2021$Sales.Count), max(data_2021$Redemption.Count),
              max(data_2023$Sales.Count), max(data_2023$Redemption.Count))
 
-# Plot for 2023
+# Plot for 2023 (Hide negative values)
 plot_2023 <- ggplot(data_2023, aes(x = Timestamp)) +
   geom_line(aes(y = Redemption.Count), color = "#A977A6", linewidth = 1.2) +
   geom_line(aes(y = -Sales.Count), color = "#C1A9D2", linewidth = 1.2) +
-  scale_y_continuous(limits = c(-y_max, y_max), sec.axis = sec_axis(~ -., name = "Sales Count")) +
+  scale_y_continuous(
+    limits = c(-y_max, y_max), 
+    breaks = seq(0, y_max, by = 1000),  # Only show positive labels for Redemption Count
+    sec.axis = sec_axis(~ -., name = "Sales Count", breaks = seq(0, y_max, by = 1000))  # Only show positive labels for Sales Count
+  ) +
   scale_x_datetime(date_breaks = "4 months", date_labels = "%b") +  # Show only 3 labels
   labs(y = "Redemption Count", x = "Month", title = "2023") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    axis.title.y.right = element_text(color = "#C1A9D2"),
+    axis.title.y.left = element_text(color = "#A977A6")
+  )
 
-# Plot for 2021
+# Plot for 2021 (Hide negative values)
 plot_2021 <- ggplot(data_2021, aes(x = Timestamp)) +
   geom_line(aes(y = Redemption.Count), color = "#F49600", linewidth = 1.2) +
   geom_line(aes(y = -Sales.Count), color = "#F9CB80", linewidth = 1.2) +
-  scale_y_continuous(limits = c(-y_max, y_max), sec.axis = sec_axis(~ -., name = "Sales Count")) +
+  scale_y_continuous(
+    limits = c(-y_max, y_max), 
+    breaks = seq(0, y_max, by = 1000),  # Only show positive labels for Redemption Count
+    sec.axis = sec_axis(~ -., name = "Sales Count", breaks = seq(0, y_max, by = 1000))  # Only show positive labels for Sales Count
+  ) +
   scale_x_datetime(date_breaks = "4 months", date_labels = "%b") +  # Show only 3 labels
   labs(y = "Redemption Count", x = "Month", title = "2021") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    axis.title.y.right = element_text(color = "#F9CB80"),
+    axis.title.y.left = element_text(color = "#F49600")
+  )
 
-# Arrange the two plots side by side
+# Corrected function call
 grid.arrange(plot_2021, plot_2023, ncol = 2)
 
 ```
-As shown in @fig-linePlot4, the x-axis denotes the timestamps of each record, while the y-axis represents the number of tickets processed. The blue line corresponds to the redemption counts, and the green line represents the sales counts, plotted inversely to emphasize the contrast between the two trends. The symmetrical y-axis allows for a clearer comparison between peaks and troughs in both counts over time.
+
+In 2021, ticket sales and redemptions were more variable, reflecting the gradual recovery from the COVID-19 pandemic as restrictions were lifted and ferry services resumed normal operations. Peaks and troughs are more pronounced, indicating fluctuating demand as public confidence in using public transportation returned. Conversely, the patterns in 2023 exhibit a more consistent trend, with a steadier increase in both ticket sales and redemptions during the summer months, reflecting a return to pre-pandemic demand levels. This comparison highlights the evolving dynamics in ferry usage, influenced by external factors such as public health measures and tourism trends.
+
+As shown in @fig-linePlot4, the x-axis denotes the timestamps of each record, while the y-axis represents the number of tickets processed. The red line corresponds to the redemption counts, and the blue line represents the sales counts, plotted inversely to emphasize the contrast between the two trends. The symmetrical y-axis allows for a clearer comparison between peaks and troughs in both counts over time.
 
 ```{r}
-#| echo: false 
-#| warning: false
-#| message: false
 #| label: fig-linePlot4
 #| fig-cap: Redemption and Sales Counts Over Time in years
-#| fig-pos: "H"  #fix the plot in current place when render
+#| fig-pos: "H"
 #| fig-width: 6
 #| fig-height: 2.5
+#| echo: false
+#| warning: false
+#| message: false
 
 # Calculate the range for both y-axes to have a symmetrical appearance
 y_max <- max(max(data$Sales.Count), max(data$Redemption.Count))
@@ -431,30 +445,32 @@ y_max <- max(max(data$Sales.Count), max(data$Redemption.Count))
 # Create the plot
 ggplot(data, aes(x = Timestamp)) +
   # Line plot for Redemption Count
-  geom_line(aes(y = Redemption.Count), color = "#F7C4C1", linewidth = 1.2) +
+  geom_line(aes(y = Redemption.Count), color = "brown2", linewidth = 1.2) +
   # Line plot for Sales Count (inverted)
-  geom_line(aes(y = -Sales.Count), color = "#83A0BE", linewidth = 1.2) +
+  geom_line(aes(y = -Sales.Count), color = "#377EB8", linewidth = 1.2) +
   
   # Set y-axis limits symmetrically and apply the secondary axis
-  scale_y_continuous(limits = c(-y_max, y_max),
-                     breaks = seq(-y_max, y_max, by = 1000),
-                     sec.axis = sec_axis(~ -., 
-                                         name = "Sales Count",
-                                         breaks = seq(y_max, -y_max, by = -1000))) +
+  scale_y_continuous(
+    limits = c(-y_max, y_max),
+    breaks = seq(0, y_max, by = 1000),  # Show only positive values for Redemption Count
+    sec.axis = sec_axis(~ -., 
+                        name = "Sales Count",
+                        breaks = seq(0, y_max, by = 1000))  # Show only positive values for Sales Count
+  ) +
   
   # Add plot labels
   labs(
     y = "Redemption Count",  # Y-axis for Redemption Count
-    x = "Years"          # X-axis for Timestamp
+    x = "Years"              # X-axis for Timestamp
   ) +
   
   # Apply minimal theme and customize axis titles
   theme_minimal() +
   theme(
-    # Color the right-side axis title (Sales Count) to match the orange line
-    axis.title.y.right = element_text(color = "#F7C4C1", size = 12),
-    # Color the left-side axis title (Redemption Count) to match the pink line
-    axis.title.y.left = element_text(color = "#83A0BE", size = 12),
+    # Color the right-side axis title (Sales Count) to match the Sales line
+    axis.title.y.left = element_text(color = "brown3", size = 12),
+    # Color the left-side axis title (Redemption Count) to match the Redemption line
+    axis.title.y.right = element_text(color = "dodgerblue3", size = 12),
     # Center the title and increase font size
   )
 
@@ -542,6 +558,8 @@ Despite the insights gained, several limitations in the current analysis should 
 
 To address these limitations, future research should consider incorporating supplementary data sources, such as weather information, event schedules, and passenger feedback, to provide a more comprehensive view of the factors affecting ferry usage. Furthermore, a comparative study with other modes of transportation in Toronto could provide valuable insights into the role of the ferry system within the broader urban transit network. This would help identify areas for service improvement and inform strategies to enhance passenger experience and operational efficiency.
 
+While the analysis provides valuable insights, there are some limitations that should be acknowledged. The dataset does not account for external variables such as weather conditions or special events, which may also significantly impact ferry usage. Additionally, the data is limited to ticket counts and does not capture other relevant factors such as passenger demographics or satisfaction levels.
+
 \newpage
 
 \appendix
@@ -554,8 +572,7 @@ Sketches depicting both the desired dataset and the graphs generated in this ana
 
 ## Data Cleaning {#sec-appendix-cleaning}
 
-The data cleaning process involved filtering out some of the columns from the raw dataset and renaming some of the data entries for clarity and simplicity.
-
+The raw FerrySale dataset underwent several cleaning steps to ensure its accuracy and usability for analysis. Initially, all rows with missing values were removed, followed by converting the Timestamp column to a standardized date-time format for consistent time series analysis. Duplicate entries were identified and eliminated to prevent inflated ticket counts. Additionally, transactions with unrealistic values, such as negative counts for ticket redemptions or sales, were filtered out. The resulting cleaned dataset, saved as cleaned_data.csv, provided a reliable foundation for the statistical analyses and visualizations presented in this paper.
 
 \newpage
 
