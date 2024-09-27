@@ -8,11 +8,12 @@ By analyzing these patterns, the study offers insights into ferry usage trends a
 This repo is structured as:
 
 -  `inputs/data` contains the raw data set obtained from OpenDataToronto.
--  `inputs/literature` contains the relevant readings used in this paper
 -  `outputs/data` contains the cleaned data set that constructed for final analysis of this paper.
 -  `outputs/paper` contains the files used to generate the final paper, including the PDF form of the paper, the quarto document, and reference bibliography file.
 -  `script` contains the R scripts used to simulate, download, clean, and test the data.
 -  `other/llm ` contains details about LLM chat interactions, and sketches.
+-  `other/sketches ` contains the initial visualized thought of how to proceed with the acquired data, presented in a hand-drawn format.
+-  `other/literature` contains the relevant readings used in this paper
 
   ## Statement on LLM usage
   Aspects of the paper are written with the help of ChatGPT and the entire chat history is available in [`other/llm/usage.txt`](https://github.com/ohyykk/ferrySale/blob/main/other/llm/usage.txt)`
